@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 const nodemailer = require('nodemailer');
+const sendMail = require('@sendgrid/mail')
 const cors = require('cors')
 
 
@@ -21,14 +22,8 @@ app.post('/api/contact', async (req, res)=>{
     const budget = req.body.budget
 
 
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth:{
-            user: process.env.MYGMAIL,
-            pass: process.env.MYPASSWORD
-        }
-        
-    })
+    sendMail.setApiKey(process.env.SENDGRID_API_KEY)
+
 
     const mailOptions = {
         from: process.env.MYGMAIL,
@@ -46,17 +41,18 @@ app.post('/api/contact', async (req, res)=>{
         `
     }
 
- transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            return res.status(500).json({error: error.message, success: false})
-        }else{
-            console.log('Email sent: ' + info.response)
-            return res.status(201).json({success: true})
-        }
-    }
-    )
-})
 
+    sendMail.send(mailOptions)
+    .then(()=> {
+        res.status(201).json({success: true})
+    }, error =>{
+   
+        res.status(500).json({error, success: false})
+    })
+    .catch(error => {
+        res.status(500).json({error, success: false})
+    })
+})
 
 
 app.listen(process.env.PORT, ()=> console.log('working'))
