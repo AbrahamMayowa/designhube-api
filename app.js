@@ -23,6 +23,7 @@ app.post('/api/contact', async (req, res)=>{
 
 
     sendMail.setApiKey(process.env.SENDGRID_API_KEY)
+    console.log(process.env.CLIENTMAIL)
 
 
     const mailOptions = {
