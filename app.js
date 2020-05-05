@@ -44,12 +44,14 @@ app.post('/api/contact', async (req, res)=>{
 
     sendMail.send(mailOptions)
     .then(()=> {
+        console.log('Email sent: ')
         res.status(201).json({success: true})
     }, error =>{
-   
+        console.log(error)
         res.status(500).json({error, success: false})
     })
     .catch(error => {
+        console.log(error)
         res.status(500).json({error, success: false})
     })
 })
