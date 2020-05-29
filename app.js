@@ -20,6 +20,7 @@ app.post('/api/contact', async (req, res)=>{
     const serviceWanted = req.body.serviceWanted
     const name = req.body.clientName
     const budget = req.body.budget
+    const socialMedia = req.body.socialMedia
 
 
     sendMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -33,6 +34,7 @@ app.post('/api/contact', async (req, res)=>{
         html: `<div>client name: ${name}</div>
 
         <div>client email: ${email}</div>
+        <div>client social media account: ${socialMedia}</div>
 
         <div> client requested service: ${serviceWanted}</div>
 
